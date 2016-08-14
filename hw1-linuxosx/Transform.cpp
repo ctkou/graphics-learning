@@ -32,10 +32,23 @@ void Transform::up(float degrees, vec3& eye, vec3& up) {
 
 // Your implementation of the glm::lookAt matrix
 mat4 Transform::lookAt(vec3 eye, vec3 up) {
-  // YOUR CODE FOR HW1 HERE
-
-  // You will change this return call
-  return mat4();
+  vec3 w = glm::normalize(eye);
+  vec3 u = glm::normalize(glm::cross(up, w));
+  vec3 v = glm::cross(w, u);
+  vec3 e = vec3(0) - eye;
+  mat4 rotation = glm::transpose(glm::mat4(
+    glm::vec4(u, 0),
+	glm::vec4(v, 0),
+	glm::vec4(w, 0),
+	glm::vec4( glm::vec3(0), 1 )
+  ));
+  mat4 translation = glm::mat4(
+    glm::vec4(1, 0, 0, 0),
+	glm::vec4(0, 1, 0, 0),
+	glm::vec4(0, 0, 1, 0),
+	glm::vec4(e, 1)
+  );
+  return rotation * translation;
 }
 
 Transform::Transform()
